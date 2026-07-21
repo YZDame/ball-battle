@@ -1,0 +1,8 @@
+{
+  "name": "ball-battle",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "mkdir -p dist/server dist/client && cp index.html dist/client/index.html && cp worker/index.js dist/server/index.js"
+  }
+}

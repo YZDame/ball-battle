@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>小球大乱斗</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap');
     :root {
       --bg: #05060a;
       --panel: rgba(18, 20, 28, 0.72);
@@ -21,7 +21,8 @@
       --radius-sm: 12px;
       --shadow: 0 18px 50px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(255,255,255,0.04);
       --shadow-soft: 0 8px 28px rgba(0, 0, 0, 0.28);
-      --font-ui: 'Inter', 'Noto Sans SC', 'PingFang SC', system-ui, sans-serif;
+      --font-ui: 'Noto Sans SC', 'PingFang SC', sans-serif;
+      --font-display: 'Archivo Black', 'Noto Sans SC', 'PingFang SC', sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -245,55 +246,6 @@
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(16px) scale(0.97); }
       to { opacity: 1; transform: none; }
-    }
-
-    /* decorative floating balls at top of card */
-    .menu-hero {
-      position: relative;
-      height: 96px;
-      flex-shrink: 0;
-      border-bottom: 1px solid var(--line);
-      background:
-        radial-gradient(circle at 30% 60%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 50%),
-        radial-gradient(circle at 78% 40%, color-mix(in srgb, var(--accent) 12%, transparent), transparent 45%),
-        linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
-      overflow: hidden;
-    }
-    .menu-hero .ball {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .menu-hero .ball-1 {
-      width: 56px; height: 56px; left: 14%; top: 22%;
-      background: radial-gradient(circle at 32% 28%, #fff9, var(--accent) 45%, color-mix(in srgb, var(--accent) 35%, #000));
-      box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 30%, transparent);
-      filter: blur(0.8px);
-      animation: floatOrb 6.5s ease-in-out infinite;
-    }
-    .menu-hero .ball-2 {
-      width: 34px; height: 34px; left: 42%; top: 38%;
-      background: radial-gradient(circle at 35% 30%, #fff8, #f472b6 50%, #831843);
-      filter: blur(1.6px); opacity: 0.8;
-      animation: floatOrb 5s ease-in-out infinite reverse;
-    }
-    .menu-hero .ball-3 {
-      width: 24px; height: 24px; right: 22%; top: 28%;
-      background: radial-gradient(circle at 35% 30%, #fff9, #fbbf24 48%, #92400e);
-      filter: blur(1.2px); opacity: 0.85;
-      animation: floatOrb 7s ease-in-out infinite;
-      animation-delay: -1.2s;
-    }
-    .menu-hero .ball-4 {
-      width: 42px; height: 42px; right: 12%; bottom: 8%;
-      background: radial-gradient(circle at 35% 30%, #fff6, #a78bfa 48%, #4c1d95);
-      filter: blur(4px); opacity: 0.4;
-      animation: floatOrb 8s ease-in-out infinite;
-      animation-delay: -2.5s;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-8px) scale(1.04); }
     }
 
     .menu-main {
@@ -645,6 +597,251 @@
     body.theme-mint .stat-box {
       background: rgba(255,255,255,0.7);
     }
+
+    /* ── Start page / launch studio ─────────────────────────── */
+    #start-screen {
+      --menu-ink: #f7f7fb;
+      --menu-muted: rgba(247, 247, 251, 0.58);
+      display: block;
+      padding: 0;
+      color: var(--menu-ink);
+      background: #08080b;
+      isolation: isolate;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+    .start-shell {
+      width: min(1420px, 100%);
+      min-height: 100%;
+      margin: 0 auto;
+      padding: 0 clamp(22px, 4vw, 68px) 42px;
+      position: relative;
+    }
+    .site-nav {
+      height: 86px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,0.11);
+      position: relative;
+      z-index: 4;
+      animation: landingReveal 0.55s ease-out both;
+    }
+    .site-brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      letter-spacing: -0.03em;
+      color: var(--menu-ink);
+    }
+    .site-brand em { color: var(--accent); font-style: normal; }
+    .logo-mark {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--menu-ink);
+      border-radius: 50%;
+      position: relative;
+      box-shadow: inset 0 -7px 0 color-mix(in srgb, var(--accent) 75%, transparent);
+    }
+    .logo-mark::before,
+    .logo-mark::after {
+      content: '';
+      position: absolute;
+      background: var(--menu-ink);
+      border-radius: 50%;
+    }
+    .logo-mark::before { width: 5px; height: 5px; left: 7px; top: 9px; }
+    .logo-mark::after { width: 5px; height: 5px; right: 7px; top: 9px; }
+    .nav-note {
+      display: flex;
+      align-items: center;
+      color: var(--menu-muted);
+      font: 500 12px/1 var(--font-ui);
+      letter-spacing: 0.01em;
+    }
+
+    .landing-layout {
+      min-height: calc(100vh - 128px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(380px, 0.72fr);
+      gap: clamp(44px, 7vw, 112px);
+      align-items: center;
+      padding: clamp(44px, 6vh, 86px) 0;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      animation: landingReveal 0.7s 0.08s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-title {
+      max-width: 760px;
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: clamp(60px, 8.1vw, 126px);
+      line-height: 0.9;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+    }
+    .hero-title span { display: block; }
+    .hero-title .accent-line {
+      color: var(--accent);
+    }
+    .hero-intro {
+      width: min(500px, 92%);
+      margin-top: 30px;
+      color: var(--menu-muted);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+    .control-tape {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .control-tape span {
+      padding: 9px 12px;
+      border: 1px solid rgba(255,255,255,0.13);
+      border-radius: 4px;
+      color: var(--menu-muted);
+      font: 500 11px/1 var(--font-ui);
+    }
+    .control-tape b { color: var(--menu-ink); margin-right: 6px; font-family: var(--font-mono); }
+
+    .orb-stage {
+      position: absolute;
+      width: min(31vw, 420px);
+      aspect-ratio: 1;
+      left: 42%;
+      top: 44%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.18;
+    }
+    .core-orb {
+      position: absolute;
+      width: 100%;
+      aspect-ratio: 1;
+      left: 0;
+      top: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle at 32% 25%, #fff 0 2%, color-mix(in srgb, var(--accent) 65%, white) 4%, var(--accent) 38%, #071818 78%);
+      box-shadow: inset -18px -22px 38px rgba(0,0,0,0.45);
+    }
+
+    #start-screen .card.menu-card {
+      width: 100%;
+      max-height: none;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: #111115;
+      box-shadow: none;
+      overflow: visible;
+      animation: landingReveal 0.7s 0.18s cubic-bezier(.22,1,.36,1) both;
+      position: relative;
+    }
+    .launcher-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 22px 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    #start-screen .menu-title {
+      margin: 0;
+      text-align: left;
+      font: 400 25px/1.1 var(--font-display);
+      letter-spacing: -0.04em;
+      color: var(--menu-ink);
+    }
+    #start-screen .menu-main { padding: 20px 22px 22px; gap: 17px; overflow: visible; }
+    #start-screen .form-row { gap: 14px; }
+    #start-screen .field { gap: 8px; }
+    #start-screen .field > label {
+      height: auto;
+      color: rgba(255,255,255,0.48);
+      font: 600 11px/1 var(--font-ui);
+    }
+    #start-screen .field input[type="text"] {
+      height: 44px;
+      border-radius: 5px;
+      border-color: rgba(255,255,255,0.13);
+      background: #09090c;
+      color: var(--menu-ink);
+      font-family: var(--font-ui);
+    }
+    #start-screen .field input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 13%, transparent);
+    }
+    #start-screen .pick-grid { gap: 7px; }
+    #start-screen .pick {
+      border-radius: 5px;
+      border-color: rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.025);
+      color: var(--menu-ink);
+    }
+    #start-screen .pick:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.32); }
+    #start-screen .pick.active {
+      border-color: var(--accent);
+      background: color-mix(in srgb, var(--accent) 10%, #0c0c0f);
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 16%, transparent), 0 8px 22px rgba(0,0,0,0.24);
+    }
+    #start-screen .pick.active .name { color: var(--menu-ink); }
+    #start-screen .mode-grid .pick { height: 44px; min-height: 44px; justify-content: center; }
+    #start-screen .style-grid .pick,
+    #start-screen .skin-grid .pick { height: 55px; min-height: 55px; }
+    #start-screen .style-grid .pick .swatch { height: 11px; border-radius: 2px; }
+    #start-screen .skin-grid .pick .swatch { width: 22px; height: 22px; }
+    #start-screen .menu-actions { margin-top: 1px; }
+    #start-screen .btn {
+      height: 52px;
+      border-radius: 5px;
+      background: var(--accent);
+      color: var(--btn-ink);
+      box-shadow: none;
+      font: 800 14px/1 var(--font-ui);
+      transition: background .16s, color .16s;
+      position: relative;
+    }
+    #start-screen .btn:hover {
+      filter: none;
+      background: #fff;
+      color: #09090c;
+    }
+    @keyframes landingReveal {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: none; }
+    }
+
+    @media (max-width: 980px) {
+      .landing-layout { grid-template-columns: 1fr; gap: 54px; padding-top: 60px; }
+      .hero-title { font-size: clamp(62px, 14vw, 112px); }
+      .hero-copy { max-width: 780px; }
+      .card.menu-card { max-width: 620px; justify-self: center; }
+      .orb-stage { width: 42vw; left: 74%; top: 28%; }
+    }
+    @media (max-width: 600px) {
+      .start-shell { padding-inline: 18px; }
+      .site-nav { height: 70px; }
+      .nav-note span:last-child { display: none; }
+      .landing-layout { padding: 42px 0; gap: 46px; }
+      .hero-title { font-size: clamp(52px, 18vw, 82px); }
+      .hero-intro { margin-top: 23px; font-size: 13px; }
+      .control-tape { margin-top: 20px; }
+      #start-screen .form-row { grid-template-columns: 1fr; }
+      #start-screen .menu-main { padding: 18px; }
+      .launcher-head { padding: 20px 18px 16px; }
+      .orb-stage { width: 58vw; left: 82%; top: 24%; opacity: 0.12; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #start-screen *, #start-screen *::before, #start-screen *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
+    }
   </style>
 </head>
 <body class="theme-neon">
@@ -689,42 +886,64 @@
   </div>
 
   <div id="start-screen">
-    <div class="card menu-card">
-      <div class="menu-hero" aria-hidden="true">
-        <span class="ball ball-1"></span>
-        <span class="ball ball-2"></span>
-        <span class="ball ball-3"></span>
-        <span class="ball ball-4"></span>
-      </div>
-      <div class="menu-main">
-        <h1 class="menu-title">小球大乱斗</h1>
+    <div class="start-shell">
+      <header class="site-nav">
+        <div class="site-brand"><span class="logo-mark" aria-hidden="true"></span><span>BALL<em>/</em>ARENA</span></div>
+        <div class="nav-note">本地对战 · 32 个 AI 对手</div>
+      </header>
 
-        <div class="form-row">
-          <div class="field">
-            <label>名字</label>
-            <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+      <main class="landing-layout">
+        <section class="hero-copy">
+          <h1 class="hero-title">
+            <span>让小球</span>
+            <span class="accent-line">吞下全场.</span>
+          </h1>
+          <p class="hero-intro">穿过竞技场，吞噬能量，利用分裂与冲刺击败 32 个 AI 对手。</p>
+          <div class="control-tape" aria-label="游戏操作">
+            <span><b>WASD</b>移动</span>
+            <span><b>J</b>分裂</span>
+            <span><b>I</b>冲刺</span>
+            <span><b>O</b>护盾</span>
           </div>
-          <div class="field">
-            <label>模式</label>
-            <div class="pick-grid mode-grid" id="mode-picks"></div>
-          </div>
+        </section>
+
+        <div class="orb-stage" aria-hidden="true">
+          <div class="core-orb"></div>
         </div>
 
-        <div class="form-row">
-          <div class="field">
-            <label>风格</label>
-            <div class="pick-grid style-grid" id="style-picks"></div>
+        <section class="card menu-card" aria-label="游戏启动设置">
+          <div class="launcher-head">
+            <h2 class="menu-title">进入竞技场</h2>
           </div>
-          <div class="field">
-            <label>皮肤</label>
-            <div class="pick-grid skin-grid" id="skin-picks"></div>
-          </div>
-        </div>
+          <div class="menu-main">
+            <div class="form-row">
+              <div class="field">
+                <label for="name-input">玩家昵称</label>
+                <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+              </div>
+              <div class="field">
+                <label>对战模式</label>
+                <div class="pick-grid mode-grid" id="mode-picks"></div>
+              </div>
+            </div>
 
-        <div class="menu-actions">
-          <button class="btn" id="btn-start">开始游戏</button>
-        </div>
-      </div>
+            <div class="form-row">
+              <div class="field">
+                <label>场景风格</label>
+                <div class="pick-grid style-grid" id="style-picks"></div>
+              </div>
+              <div class="field">
+                <label>小球皮肤</label>
+                <div class="pick-grid skin-grid" id="skin-picks"></div>
+              </div>
+            </div>
+
+            <div class="menu-actions">
+              <button class="btn" id="btn-start">开始游戏</button>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
   </div>
 
