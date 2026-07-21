@@ -222,8 +222,8 @@
     #end-screen { display: none; }
 
     .card {
-      width: min(560px, 94vw);
-      max-height: min(92vh, 560px);
+      width: min(720px, 96vw);
+      max-height: min(90vh, 520px);
       padding: 0;
       border-radius: 24px;
       border: 1px solid var(--line);
@@ -236,34 +236,88 @@
       display: flex;
       flex-direction: column;
     }
-    .card.menu-card { width: min(520px, 94vw); }
+    .card.menu-card { width: min(720px, 96vw); }
     .card.end-card { width: min(400px, 92vw); max-height: none; }
-    .menu-title {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      text-align: center;
-      margin: 4px 0 6px;
-      background: linear-gradient(135deg, var(--text), color-mix(in srgb, var(--accent) 70%, var(--text)));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 2px 12px color-mix(in srgb, var(--accent) 25%, transparent));
-    }
-    .menu-main.compact {
-      padding: 18px 18px 16px;
-      gap: 12px;
-    }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(18px) scale(0.96); filter: blur(6px); }
       to { opacity: 1; transform: none; filter: none; }
     }
 
+    .menu-shell {
+      display: grid;
+      grid-template-columns: 0.85fr 1.2fr;
+      min-height: 0;
+      flex: 1;
+    }
+    @media (max-width: 680px) {
+      .menu-shell { grid-template-columns: 1fr; }
+      .menu-art { min-height: 120px; }
+    }
+
+    .menu-art {
+      position: relative;
+      padding: 28px 22px;
+      border-right: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 28% 32%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 52%),
+        radial-gradient(circle at 82% 72%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 48%),
+        linear-gradient(160deg, rgba(255,255,255,0.05), transparent 62%);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .menu-art::before,
+    .menu-art::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(1.5px);
+      animation: floatOrb 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .menu-art::before {
+      width: 110px; height: 110px; left: 14%; top: 22%;
+      background: radial-gradient(circle at 35% 30%, #fff8, var(--accent) 45%, transparent 70%);
+      opacity: 0.85;
+    }
+    .menu-art::after {
+      width: 64px; height: 64px; right: 16%; bottom: 22%;
+      background: radial-gradient(circle at 40% 30%, #fff6, color-mix(in srgb, var(--accent) 70%, #a78bfa), transparent 72%);
+      animation-delay: -2.5s; opacity: 0.75;
+    }
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-12px) scale(1.05); }
+    }
+    .menu-art .orb-sm {
+      position: absolute; width: 26px; height: 26px; border-radius: 50%;
+      left: 58%; top: 46%;
+      background: radial-gradient(circle at 35% 30%, #fff9, var(--gold) 50%, transparent 72%);
+      animation: floatOrb 5.5s ease-in-out infinite reverse;
+      opacity: 0.9; pointer-events: none;
+    }
+    .menu-art .menu-title {
+      position: relative; z-index: 1;
+      font-size: clamp(28px, 3.4vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      text-align: center;
+      margin: 0;
+      background: linear-gradient(135deg, #fff, color-mix(in srgb, var(--accent) 75%, #fff));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 4px 20px color-mix(in srgb, var(--accent) 30%, transparent));
+    }
+
     .menu-main {
       padding: 16px 18px 16px;
-      display: flex; flex-direction: column; gap: 10px;
+      display: flex; flex-direction: column; gap: 12px;
       min-height: 0;
       overflow: auto;
+      justify-content: center;
     }
     .menu-main .top-row {
       display: grid;
@@ -507,33 +561,37 @@
 
   <div id="start-screen">
     <div class="card menu-card">
-      <div class="menu-main compact">
-        <h1 class="menu-title">小球大乱斗</h1>
+      <div class="menu-shell">
+        <aside class="menu-art">
+          <div class="orb-sm" aria-hidden="true"></div>
+          <h1 class="menu-title">小球大乱斗</h1>
+        </aside>
+        <div class="menu-main">
+          <div class="top-row">
+            <div class="field">
+              <label>名字</label>
+              <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+            </div>
+            <div class="field">
+              <label>模式</label>
+              <div class="pick-grid mode-grid" id="mode-picks"></div>
+            </div>
+          </div>
 
-        <div class="top-row">
-          <div class="field">
-            <label>名字</label>
-            <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+          <div class="mid-row">
+            <div class="field">
+              <label>风格</label>
+              <div class="pick-grid style-grid" id="style-picks"></div>
+            </div>
+            <div class="field">
+              <label>皮肤</label>
+              <div class="pick-grid skin-grid" id="skin-picks"></div>
+            </div>
           </div>
-          <div class="field">
-            <label>模式</label>
-            <div class="pick-grid mode-grid" id="mode-picks"></div>
-          </div>
-        </div>
 
-        <div class="mid-row">
-          <div class="field">
-            <label>风格</label>
-            <div class="pick-grid style-grid" id="style-picks"></div>
+          <div class="menu-actions">
+            <button class="btn" id="btn-start">开始游戏</button>
           </div>
-          <div class="field">
-            <label>皮肤</label>
-            <div class="pick-grid skin-grid" id="skin-picks"></div>
-          </div>
-        </div>
-
-        <div class="menu-actions">
-          <button class="btn" id="btn-start">开始游戏</button>
         </div>
       </div>
     </div>
@@ -1607,7 +1665,51 @@
     };
   }
 
-  function makeBot(i) {
+  // Prefer map corners / edges, never near a death spot
+  function pickSpawnPoint(avoidX, avoidY) {
+    const margin = 380;
+    const spots = [
+      [margin, margin],
+      [WORLD - margin, margin],
+      [margin, WORLD - margin],
+      [WORLD - margin, WORLD - margin],
+      [WORLD * 0.5, margin],
+      [WORLD * 0.5, WORLD - margin],
+      [margin, WORLD * 0.5],
+      [WORLD - margin, WORLD * 0.5],
+      [WORLD * 0.25, WORLD * 0.25],
+      [WORLD * 0.75, WORLD * 0.25],
+      [WORLD * 0.25, WORLD * 0.75],
+      [WORLD * 0.75, WORLD * 0.75]
+    ].map(([sx, sy]) => [
+      clamp(sx + rand(-120, 120), 200, WORLD - 200),
+      clamp(sy + rand(-120, 120), 200, WORLD - 200)
+    ]);
+
+    // shuffle
+    for (let i = spots.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      [spots[i], spots[j]] = [spots[j], spots[i]];
+    }
+
+    const minDist = 1400;
+    if (avoidX != null && avoidY != null) {
+      for (const [sx, sy] of spots) {
+        if (dist(sx, sy, avoidX, avoidY) >= minDist) return { x: sx, y: sy };
+      }
+      // farthest corner fallback
+      let best = spots[0], bestD = -1;
+      for (const [sx, sy] of spots) {
+        const d = dist(sx, sy, avoidX, avoidY);
+        if (d > bestD) { bestD = d; best = [sx, sy]; }
+      }
+      return { x: best[0], y: best[1] };
+    }
+    const [sx, sy] = spots[0];
+    return { x: sx, y: sy };
+  }
+
+  function makeBot(i, opts = {}) {
     const solo = gameMode === 'solo';
     // solo: unique team per bot; team: shared team clusters
     const teamId = solo ? (1000 + i) : (i % TEAM_COUNT);
@@ -1615,16 +1717,21 @@
     const baseName = BOT_NAMES[i % BOT_NAMES.length];
     const name = solo ? baseName : (TEAM_NAMES[teamId] + '·' + baseName);
     const id = 'b' + i;
+
     let x, y;
-    if (solo) {
-      x = rand(200, WORLD - 200);
-      y = rand(200, WORLD - 200);
+    if (opts.avoidX != null && opts.avoidY != null) {
+      // respawn after death: far from death point, preferably another corner
+      ({ x, y } = pickSpawnPoint(opts.avoidX, opts.avoidY));
+    } else if (solo) {
+      ({ x, y } = pickSpawnPoint(null, null));
     } else {
+      // team mode initial: loose cluster, still near map zones
       const clusterX = 600 + (teamId % 4) * (WORLD - 1200) / 3 + rand(-180, 180);
       const clusterY = 600 + Math.floor(teamId / 4) * (WORLD - 1200) / 2 + rand(-180, 180);
       x = clamp(clusterX, 200, WORLD - 200);
       y = clamp(clusterY, 200, WORLD - 200);
     }
+
     const mass = rand(40, 95);
     const botSkins = ['classic', 'metal', 'flame', 'ice', 'ghost', 'planet', 'rainbow', 'eye'];
     const skinId = pick(botSkins);
@@ -1637,7 +1744,9 @@
       aggression: rand(0.72, 1.2),
       skill: rand(0.85, 1.35),
       alive: true,
-      growthBonus: rand(2.1, 3.0)
+      growthBonus: rand(2.1, 3.0),
+      deathX: null,
+      deathY: null
     };
   }
 
@@ -2622,6 +2731,9 @@
 
         if (B.entity.cells.length === 0) {
           B.entity.alive = false;
+          // remember death spot so respawn is nowhere near here
+          B.entity.deathX = B.cell.x;
+          B.entity.deathY = B.cell.y;
           if (B.entity === player) {
             gameOver('被 ' + A.entity.name + ' 吞食');
           } else {
@@ -2637,7 +2749,10 @@
     if (state !== 'play' && state !== 'pause') return;
     const i = bots.indexOf(bot);
     if (i < 0) return;
-    bots[i] = makeBot(i);
+    bots[i] = makeBot(i, {
+      avoidX: bot.deathX != null ? bot.deathX : null,
+      avoidY: bot.deathY != null ? bot.deathY : null
+    });
   }
 
   function handleViruses(entity) {
