@@ -222,8 +222,8 @@
     #end-screen { display: none; }
 
     .card {
-      width: min(760px, 96vw);
-      max-height: min(92vh, 640px);
+      width: min(560px, 94vw);
+      max-height: min(92vh, 560px);
       padding: 0;
       border-radius: 24px;
       border: 1px solid var(--line);
@@ -236,83 +236,27 @@
       display: flex;
       flex-direction: column;
     }
+    .card.menu-card { width: min(520px, 94vw); }
     .card.end-card { width: min(400px, 92vw); max-height: none; }
+    .menu-title {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      text-align: center;
+      margin: 4px 0 6px;
+      background: linear-gradient(135deg, var(--text), color-mix(in srgb, var(--accent) 70%, var(--text)));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 2px 12px color-mix(in srgb, var(--accent) 25%, transparent));
+    }
+    .menu-main.compact {
+      padding: 18px 18px 16px;
+      gap: 12px;
+    }
     @keyframes cardIn {
       from { opacity: 0; transform: translateY(18px) scale(0.96); filter: blur(6px); }
       to { opacity: 1; transform: none; filter: none; }
-    }
-
-    .menu-shell {
-      display: grid;
-      grid-template-columns: 0.9fr 1.15fr;
-      min-height: 0;
-      flex: 1;
-    }
-    @media (max-width: 700px) {
-      .menu-shell { grid-template-columns: 1fr; }
-      .menu-art { display: none !important; }
-      .card { max-height: 94vh; overflow: auto; }
-    }
-
-    .menu-art {
-      position: relative;
-      padding: 22px 20px;
-      border-right: 1px solid var(--line);
-      background:
-        radial-gradient(circle at 30% 30%, color-mix(in srgb, var(--accent) 28%, transparent), transparent 50%),
-        radial-gradient(circle at 80% 70%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 45%),
-        linear-gradient(160deg, rgba(255,255,255,0.04), transparent 60%);
-      overflow: hidden;
-      display: flex; flex-direction: column; justify-content: space-between;
-    }
-    .menu-art::before,
-    .menu-art::after {
-      content: '';
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(2px);
-      animation: floatOrb 7s ease-in-out infinite;
-    }
-    .menu-art::before {
-      width: 120px; height: 120px; left: 12%; top: 22%;
-      background: radial-gradient(circle at 35% 30%, #fff8, var(--accent) 45%, transparent 70%);
-      opacity: 0.85;
-    }
-    .menu-art::after {
-      width: 72px; height: 72px; right: 14%; bottom: 24%;
-      background: radial-gradient(circle at 40% 30%, #fff6, color-mix(in srgb, var(--accent) 70%, #a78bfa), transparent 72%);
-      animation-delay: -2.5s; opacity: 0.75;
-    }
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-12px) scale(1.05); }
-    }
-    .menu-art .orb-sm {
-      position: absolute; width: 28px; height: 28px; border-radius: 50%;
-      left: 58%; top: 48%;
-      background: radial-gradient(circle at 35% 30%, #fff9, var(--gold) 50%, transparent 72%);
-      animation: floatOrb 5.5s ease-in-out infinite reverse;
-      opacity: 0.9;
-    }
-    .menu-art .art-copy { position: relative; z-index: 1; }
-    .menu-art .eyebrow {
-      font-size: 12px; font-weight: 600;
-      color: var(--accent);
-    }
-    .menu-art h2 {
-      font-size: clamp(26px, 3.2vw, 34px);
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin: 10px 0 8px;
-    }
-    .menu-art p {
-      color: var(--muted); font-size: 12px; line-height: 1.55;
-      max-width: 22ch; font-weight: 500;
-    }
-    .menu-art .art-foot {
-      position: relative; z-index: 1;
-      font-size: 11px; color: var(--muted); font-weight: 500;
     }
 
     .menu-main {
@@ -397,24 +341,6 @@
       width: 100%; height: 14px; border-radius: 6px; margin-bottom: 3px;
     }
     .skin-grid { grid-template-columns: repeat(4, 1fr); }
-
-    .key-chips {
-      display: flex; flex-wrap: wrap; gap: 5px;
-      padding-top: 2px;
-    }
-    .key-chips span {
-      font-size: 10px; font-weight: 600; color: var(--muted);
-      background: rgba(255,255,255,0.04);
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      padding: 4px 8px;
-    }
-    .key-chips b {
-      font-family: var(--font-mono);
-      color: var(--text);
-      font-weight: 700;
-      margin-right: 3px;
-    }
 
     .menu-actions {
       display: flex; gap: 8px; align-items: center;
@@ -580,52 +506,34 @@
   </div>
 
   <div id="start-screen">
-    <div class="card">
-      <div class="menu-shell">
-        <aside class="menu-art">
-          <div class="art-copy">
-            <div class="eyebrow">桌面小游戏</div>
-            <h2>小球<br />大乱斗</h2>
-            <p>吞食、分裂、合球。在圆场里长成最重的那一颗。</p>
-          </div>
-          <div class="orb-sm" aria-hidden="true"></div>
-          <div class="art-foot">方向键移动 · 技能见右侧</div>
-        </aside>
-        <div class="menu-main">
-          <div class="top-row">
-            <div class="field">
-              <label>名字</label>
-              <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
-            </div>
-            <div class="field">
-              <label>模式</label>
-              <div class="pick-grid mode-grid" id="mode-picks"></div>
-            </div>
-          </div>
+    <div class="card menu-card">
+      <div class="menu-main compact">
+        <h1 class="menu-title">小球大乱斗</h1>
 
-          <div class="mid-row">
-            <div class="field">
-              <label>风格</label>
-              <div class="pick-grid style-grid" id="style-picks"></div>
-            </div>
-            <div class="field">
-              <label>皮肤</label>
-              <div class="pick-grid skin-grid" id="skin-picks"></div>
-            </div>
+        <div class="top-row">
+          <div class="field">
+            <label>名字</label>
+            <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
           </div>
+          <div class="field">
+            <label>模式</label>
+            <div class="pick-grid mode-grid" id="mode-picks"></div>
+          </div>
+        </div>
 
-          <div class="key-chips">
-            <span><b>WASD</b>移动</span>
-            <span><b>J/U</b>分裂</span>
-            <span><b>K</b>吐球</span>
-            <span><b>G</b>合球</span>
-            <span><b>I/O</b>冲刺/盾</span>
-            <span><b>H/N</b>磁力/膨胀</span>
+        <div class="mid-row">
+          <div class="field">
+            <label>风格</label>
+            <div class="pick-grid style-grid" id="style-picks"></div>
           </div>
+          <div class="field">
+            <label>皮肤</label>
+            <div class="pick-grid skin-grid" id="skin-picks"></div>
+          </div>
+        </div>
 
-          <div class="menu-actions">
-            <button class="btn" id="btn-start">开始游戏</button>
-          </div>
+        <div class="menu-actions">
+          <button class="btn" id="btn-start">开始游戏</button>
         </div>
       </div>
     </div>
@@ -1245,48 +1153,39 @@
   const SFX = (() => {
     let ctx = null;
     let master = null;
-    let musicGain = null;
     let enabled = localStorage.getItem('bb_sfx') !== '0';
     let unlocked = false;
     const last = Object.create(null);
     let magnetNodes = null;
-    let eatPitch = 0;
-    let bgmTimer = null;
-    let bgmStep = 0;
     let bgmOn = false;
     let bgmMode = 'menu'; // menu | game
-    let padNodes = null;
+    let bgmEl = null;
 
-    // Bright major-key game music (no muddy low drones)
-    // Menu: light bouncy lounge · Game: upbeat battle-chiptune energy
-    const MENU = {
-      root: 261.63, // C4 — higher, clearer
-      beat: 0.34,
-      level: 0.42,
-      // I – vi – IV – V (major, cheerful)
-      patterns: [
-        [0, 4, 7, 12],
-        [9, 12, 16, 19],
-        [5, 9, 12, 17],
-        [7, 11, 14, 19]
-      ]
+    // Local loop tracks (generated cheerful WAV, free to use with the game)
+    const tracks = {
+      menu: new Audio('audio/menu.wav'),
+      game: new Audio('audio/game.wav')
     };
-    const GAME = {
-      root: 293.66, // D4
-      beat: 0.28,
-      level: 0.5,
-      // rotating major progressions
-      sections: [
-        // bright pop loop
-        [[0, 4, 7, 12], [5, 9, 12, 16], [7, 11, 14, 19], [0, 4, 7, 11]],
-        // adventure bounce
-        [[0, 4, 7, 12], [2, 5, 9, 14], [5, 9, 12, 17], [7, 11, 14, 19]],
-        // playful chase
-        [[0, 4, 7, 11], [9, 12, 16, 19], [5, 9, 12, 16], [7, 12, 16, 19]],
-        // victory-ish lift
-        [[0, 4, 7, 12], [5, 9, 12, 17], [9, 12, 16, 21], [7, 11, 14, 19]]
-      ]
+    tracks.menu.loop = true;
+    tracks.game.loop = true;
+    tracks.menu.volume = 0.38;
+    tracks.game.volume = 0.42;
+    tracks.menu.preload = 'auto';
+    tracks.game.preload = 'auto';
+
+    const sfxFiles = {
+      eat: 'audio/eat.wav',
+      pop: 'audio/pop.wav'
     };
+
+    function playFile(src, vol = 0.5) {
+      if (!enabled) return;
+      try {
+        const a = new Audio(src);
+        a.volume = vol;
+        a.play().catch(() => {});
+      } catch (_) {}
+    }
 
     function ensure() {
       if (!ctx) {
@@ -1296,9 +1195,6 @@
         master = ctx.createGain();
         master.gain.value = enabled ? 0.32 : 0;
         master.connect(ctx.destination);
-        musicGain = ctx.createGain();
-        musicGain.gain.value = 0;
-        musicGain.connect(ctx.destination);
       }
       if (ctx.state === 'suspended') ctx.resume();
       unlocked = true;
@@ -1312,12 +1208,7 @@
       if (master) master.gain.value = enabled ? 0.32 : 0;
       if (!enabled) {
         stopMagnetHum();
-        if (musicGain && ctx) {
-          musicGain.gain.cancelScheduledValues(ctx.currentTime);
-          musicGain.gain.setValueAtTime(0, ctx.currentTime);
-        }
-        if (bgmTimer) { clearInterval(bgmTimer); bgmTimer = null; }
-        stopPad();
+        stopBGM(true);
       } else if (wasOn === false) {
         if (state === 'menu' || state === 'dead') startBGM('menu');
         else if (state === 'play' || state === 'pause') startBGM('game');
@@ -1327,242 +1218,52 @@
 
     function isEnabled() { return enabled; }
 
-    function midiRatio(semi) {
-      return Math.pow(2, semi / 12);
-    }
-
-    function conf() {
-      return bgmMode === 'menu' ? MENU : GAME;
-    }
-
-    function startPad() {
-      // light high pad only — no sub-bass drone
-      if (!ensure() || !musicGain || padNodes) return;
-      const c = conf();
-      const t0 = ctx.currentTime;
-      const o1 = ctx.createOscillator();
-      const o2 = ctx.createOscillator();
-      const g = ctx.createGain();
-      const f = ctx.createBiquadFilter();
-      o1.type = 'triangle'; o1.frequency.value = c.root;
-      o2.type = 'sine'; o2.frequency.value = c.root * 1.5;
-      f.type = 'lowpass';
-      f.frequency.value = bgmMode === 'menu' ? 2400 : 2800;
-      const padLvl = bgmMode === 'menu' ? 0.028 : 0.032;
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(padLvl, t0 + 0.8);
-      o1.connect(f); o2.connect(f);
-      f.connect(g); g.connect(musicGain);
-      o1.start(t0); o2.start(t0);
-      padNodes = { o1, o2, g, f };
-    }
-
-    function stopPad() {
-      if (!padNodes || !ctx) return;
-      const t0 = ctx.currentTime;
-      try {
-        padNodes.g.gain.cancelScheduledValues(t0);
-        padNodes.g.gain.setValueAtTime(Math.max(0.0001, padNodes.g.gain.value), t0);
-        padNodes.g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.35);
-        padNodes.o1.stop(t0 + 0.4);
-        padNodes.o2.stop(t0 + 0.4);
-      } catch (_) {}
-      padNodes = null;
-    }
-
-    function noiseHit(t0, peak, dur, hp, type) {
-      const n = Math.max(1, Math.floor(ctx.sampleRate * dur));
-      const buf = ctx.createBuffer(1, n, ctx.sampleRate);
-      const data = buf.getChannelData(0);
-      for (let i = 0; i < n; i++) data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / n, 1.5);
-      const src = ctx.createBufferSource();
-      src.buffer = buf;
-      const filter = ctx.createBiquadFilter();
-      filter.type = type || 'highpass';
-      filter.frequency.value = hp || 3000;
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(peak, t0 + 0.004);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-      src.connect(filter); filter.connect(g); g.connect(musicGain);
-      src.start(t0); src.stop(t0 + dur + 0.02);
-    }
-
-    function pluck(freq, t0, peak, dur, type) {
-      const o = ctx.createOscillator();
-      const g = ctx.createGain();
-      const f = ctx.createBiquadFilter();
-      o.type = type || 'triangle';
-      o.frequency.setValueAtTime(freq, t0);
-      f.type = 'lowpass';
-      f.frequency.setValueAtTime(Math.min(5200, freq * 6), t0);
-      f.frequency.exponentialRampToValueAtTime(800, t0 + dur);
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(peak, t0 + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-      o.connect(f); f.connect(g); g.connect(musicGain);
-      o.start(t0); o.stop(t0 + dur + 0.02);
-    }
-
-    function scheduleMenuBar(step) {
-      if (!ctx || !musicGain || !enabled) return;
-      const chord = MENU.patterns[step % MENU.patterns.length];
-      const t0 = ctx.currentTime + 0.015;
-      const beat = MENU.beat;
-
-      // soft click groove
-      noiseHit(t0, 0.03, 0.04, 5000, 'highpass');
-      if (step % 2 === 0) noiseHit(t0 + beat * 0.5, 0.018, 0.03, 6000, 'highpass');
-
-      // bouncy mid bass (not sub)
-      pluck(MENU.root * 0.5 * midiRatio(chord[0]), t0, 0.045, beat * 1.3, 'triangle');
-
-      // cheerful arpeggio up
-      chord.forEach((semi, i) => {
-        const t = t0 + i * (beat * 0.22);
-        pluck(MENU.root * midiRatio(semi + 12), t, 0.032, 0.28, i % 2 ? 'sine' : 'triangle');
-      });
-
-      // whistly top motif every other bar
-      if (step % 2 === 1) {
-        const melody = [chord[2] + 12, chord[3] + 12, chord[1] + 12, chord[0] + 24];
-        melody.forEach((semi, i) => {
-          pluck(MENU.root * midiRatio(semi), t0 + beat * 0.15 + i * beat * 0.2, 0.02, 0.22, 'sine');
-        });
-      }
-    }
-
-    function scheduleGameBar(step) {
-      if (!ctx || !musicGain || !enabled) return;
-      const section = GAME.sections[Math.floor(step / 8) % GAME.sections.length];
-      const chord = section[step % section.length];
-      const t0 = ctx.currentTime + 0.015;
-      const beat = GAME.beat;
-      const energy = 0.9 + 0.1 * Math.sin(step * 0.5);
-
-      // tight kick (higher, punchy — not boom)
-      const kick = ctx.createOscillator();
-      const kg = ctx.createGain();
-      kick.type = 'sine';
-      kick.frequency.setValueAtTime(180, t0);
-      kick.frequency.exponentialRampToValueAtTime(70, t0 + 0.09);
-      kg.gain.setValueAtTime(0.0001, t0);
-      kg.gain.exponentialRampToValueAtTime(0.07 * energy, t0 + 0.006);
-      kg.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.14);
-      kick.connect(kg); kg.connect(musicGain);
-      kick.start(t0); kick.stop(t0 + 0.16);
-
-      // snappy hats 8th notes
-      noiseHit(t0 + beat * 0.25, 0.02, 0.03, 7000, 'highpass');
-      noiseHit(t0 + beat * 0.5, 0.028, 0.035, 6500, 'highpass');
-      noiseHit(t0 + beat * 0.75, 0.018, 0.025, 8000, 'highpass');
-
-      // springy bass
-      pluck(GAME.root * 0.5 * midiRatio(chord[0]), t0, 0.05 * energy, beat * 1.15, 'triangle');
-      if (step % 2 === 1) {
-        pluck(GAME.root * 0.5 * midiRatio(chord[0] + 7), t0 + beat * 0.5, 0.035, beat * 0.55, 'triangle');
-      }
-
-      // bright chiptune arps
-      chord.forEach((semi, i) => {
-        const t = t0 + i * (beat * 0.18);
-        const oct = (step % 8 >= 4) ? 12 : 0;
-        pluck(GAME.root * midiRatio(semi + 12 + oct), t, 0.034 * energy, 0.2, i % 2 ? 'square' : 'triangle');
-      });
-
-      // call-and-response lead
-      if (step % 4 === 0 || step % 4 === 2) {
-        const lead = step % 8 < 4
-          ? [chord[2] + 12, chord[3] + 12, chord[1] + 12, chord[2] + 24]
-          : [chord[3] + 12, chord[2] + 12, chord[0] + 12, chord[3] + 24];
-        lead.forEach((semi, i) => {
-          pluck(GAME.root * midiRatio(semi), t0 + beat * 0.08 + i * beat * 0.2, 0.026 * energy, 0.24, 'square');
-        });
-      }
-
-      // little fanfare jump every 8 bars
-      if (step % 8 === 7) {
-        [0, 4, 7, 12].forEach((semi, i) => {
-          pluck(GAME.root * midiRatio(semi + 19), t0 + i * 0.05, 0.03, 0.35, 'triangle');
-        });
-      }
-    }
-
     function startBGM(mode) {
       if (mode) bgmMode = mode;
       bgmOn = true;
-      if (!enabled || !ensure()) return;
-      // restart if mode changes
-      if (bgmTimer) {
-        clearInterval(bgmTimer);
-        bgmTimer = null;
-      }
-      stopPad();
-      const c = conf();
-      const t0 = ctx.currentTime;
-      musicGain.gain.cancelScheduledValues(t0);
-      musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value || 0.0001), t0);
-      musicGain.gain.exponentialRampToValueAtTime(c.level, t0 + 0.7);
-      startPad();
-      bgmStep = 0;
-      if (bgmMode === 'menu') scheduleMenuBar(bgmStep++);
-      else scheduleGameBar(bgmStep++);
-
-      const interval = c.beat * 1000 * (bgmMode === 'menu' ? 1.85 : 1.65);
-      bgmTimer = setInterval(() => {
-        if (!enabled || !bgmOn) return;
-        if (ctx && ctx.state === 'suspended') ctx.resume();
-        if (bgmMode === 'menu') scheduleMenuBar(bgmStep++);
-        else scheduleGameBar(bgmStep++);
-        if (padNodes) {
-          const patterns = bgmMode === 'menu'
-            ? MENU.patterns
-            : GAME.sections[Math.floor((bgmStep - 1) / 8) % GAME.sections.length];
-          const chord = patterns[(bgmStep - 1) % patterns.length];
-          const root = conf().root * midiRatio(chord[0]);
-          try {
-            padNodes.o1.frequency.linearRampToValueAtTime(root, ctx.currentTime + 0.2);
-            padNodes.o2.frequency.linearRampToValueAtTime(root * 1.5, ctx.currentTime + 0.2);
-          } catch (_) {}
+      if (!enabled) return;
+      ensure();
+      const next = tracks[bgmMode] || tracks.menu;
+      // stop other track
+      Object.values(tracks).forEach(t => {
+        if (t !== next) {
+          try { t.pause(); t.currentTime = 0; } catch (_) {}
         }
-      }, interval);
+      });
+      bgmEl = next;
+      try {
+        if (bgmEl.paused) {
+          bgmEl.currentTime = 0;
+          bgmEl.play().catch(() => {});
+        } else {
+          // already playing this track
+          bgmEl.play().catch(() => {});
+        }
+      } catch (_) {}
     }
 
     function stopBGM(immediate) {
       bgmOn = false;
-      if (bgmTimer) {
-        clearInterval(bgmTimer);
-        bgmTimer = null;
-      }
-      stopPad();
-      if (musicGain && ctx) {
-        const t0 = ctx.currentTime;
-        musicGain.gain.cancelScheduledValues(t0);
-        if (immediate) {
-          musicGain.gain.setValueAtTime(0, t0);
-        } else {
-          musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), t0);
-          musicGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.6);
-        }
-      }
+      Object.values(tracks).forEach(t => {
+        try {
+          t.pause();
+          if (immediate) t.currentTime = 0;
+        } catch (_) {}
+      });
+      bgmEl = null;
     }
 
     function pauseBGM() {
-      if (!musicGain || !ctx) return;
-      const t0 = ctx.currentTime;
-      musicGain.gain.cancelScheduledValues(t0);
-      musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), t0);
-      musicGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.25);
+      if (bgmEl) {
+        try { bgmEl.pause(); } catch (_) {}
+      }
     }
 
     function resumeBGM() {
-      if (!bgmOn || !enabled || !musicGain || !ctx) return;
-      const t0 = ctx.currentTime;
-      const lvl = conf().level;
-      musicGain.gain.cancelScheduledValues(t0);
-      musicGain.gain.setValueAtTime(Math.max(0.0001, musicGain.gain.value), t0);
-      musicGain.gain.exponentialRampToValueAtTime(lvl, t0 + 0.35);
-      if (!bgmTimer) startBGM(bgmMode);
+      if (!bgmOn || !enabled) return;
+      ensure();
+      if (!bgmEl) bgmEl = tracks[bgmMode] || tracks.menu;
+      try { bgmEl.play().catch(() => {}); } catch (_) {}
     }
 
     function can(name, gap) {
@@ -1624,11 +1325,9 @@
           setTimeout(() => tone(784, 0.22, 'sine', 0.22, 988), 80);
           break;
         case 'eat': {
-          if (!can('eat', 28)) return;
-          eatPitch = (eatPitch + 1) % 8;
-          const f = 520 + eatPitch * 45 + rand(-20, 20);
-          tone(f, 0.07, 'sine', 0.14, f * 1.35);
-          tone(f * 0.5, 0.05, 'triangle', 0.06, null);
+          if (!can('eat', 32)) return;
+          // soft water-drop / gulp — not sharp ding
+          playFile(sfxFiles.eat, 0.55);
           break;
         }
         case 'eject':
@@ -1673,15 +1372,12 @@
           setTimeout(() => chord([392, 523, 659], 0.25, 'sine', 0.18), 60);
           break;
         case 'kill':
-          chord([523, 659, 784, 1046], 0.22, 'square', 0.12);
-          tone(200, 0.15, 'sawtooth', 0.14, 80);
-          noiseBurst(0.12, 0.16, 500);
+          playFile(sfxFiles.pop, 0.6);
+          setTimeout(() => playFile(sfxFiles.eat, 0.4), 40);
           break;
         case 'eatPlayer':
           if (!can('eatPlayer', 80)) return;
-          tone(180, 0.12, 'sawtooth', 0.16, 90);
-          tone(360, 0.1, 'triangle', 0.12, 240);
-          noiseBurst(0.08, 0.12, 350);
+          playFile(sfxFiles.pop, 0.5);
           break;
         case 'death':
           stopMagnetHum();
