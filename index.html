@@ -1867,6 +1867,11 @@
   let dashT = 0;
   let brakeT = 0;
   let magnetT = 0;
+  // split/eject hold cadence (prevents 1 keypress → multi-frame cascade looking like 1→3)
+  let lastSplitAt = 0;
+  let lastEjectAt = 0;
+  const SPLIT_HOLD_GAP = 0.14; // seconds between held splits; each is still pure 1→2
+  const EJECT_HOLD_GAP = 0.04;
 
   // ─── Entities ─────────────────────────────────────────────
   function makeCell(x, y, mass, color, name, ownerId, isPlayer, skinId) {
@@ -2037,6 +2042,8 @@
     moveDir = { x: 0, y: 0 };
     coastDir = { x: 0, y: 0 };
     coasting = false;
+    lastSplitAt = 0;
+    lastEjectAt = 0;
   }
 
   function startGame() {
@@ -2090,10 +2097,12 @@
     keys.add(k);
 
     if (state === 'play') {
-      if (k === 'j') useSkill('j');
-      if (k === 'k') useSkill('k');
+      // J / U / K: fire once on press; hold repeats in update with a small gap
+      // (avoids keydown + same-frame hold both firing → one ball becoming 3)
+      if (k === 'j') { useSkill('j'); lastSplitAt = performance.now() / 1000; }
+      if (k === 'u') { useSkill('u'); lastSplitAt = performance.now() / 1000; }
+      if (k === 'k') { useSkill('k'); lastEjectAt = performance.now() / 1000; }
       if (k === 'l') useSkill('l');
-      if (k === 'u') useSkill('u');
       if (k === 'g') useSkill('g');
       if (k === 'i') useSkill('i');
       if (k === 'o') useSkill('o');
@@ -2365,19 +2374,25 @@
   }
 
   // ─── Actions ──────────────────────────────────────────────
-  // Binary split: only the single largest eligible cell → 2 pieces.
-  // Limits: MAX_CELLS total, each half ≥ MIN_CELL_MASS. No time cooldown.
+  // Strict binary split: pick ONE eligible large cell → exactly two pieces.
+  // Small cells (mass < MIN_SPLIT_MASS) are never touched.
+  // Never splits multiple cells in one call.
   function trySplit(entity, opts = {}) {
     if (!entity || !entity.alive) return false;
     if (entity.cells.length >= MAX_CELLS) return false;
     const now = performance.now() / 1000;
     const boost = opts.boost != null ? opts.boost : 22;
-    const cell = [...entity.cells].sort((a, b) => b.mass - a.mass)
-      .find(c => c.mass >= MIN_SPLIT_MASS);
+
+    // only the single largest cell that is big enough to half cleanly
+    let cell = null;
+    for (const c of entity.cells) {
+      if (c.mass < MIN_SPLIT_MASS) continue;
+      if (c.mass / 2 < MIN_CELL_MASS) continue;
+      if (!cell || c.mass > cell.mass) cell = c;
+    }
     if (!cell) return false;
 
     const half = cell.mass / 2;
-    if (half < MIN_CELL_MASS) return false;
     cell.mass = half;
     cell.r = massToR(half);
     cell.displayR = cell.r;
@@ -2404,6 +2419,7 @@
     nc.vy = Math.sin(ang) * boost;
     nc.mergeAt = now + MERGE_DELAY;
     nc.squash = 0.5;
+    // both halves share recombine lock; no second split in this same action
     cell.mergeAt = now + MERGE_DELAY;
     entity.cells.push(nc);
     spawnRing(cell.x, cell.y, cell.color, cell.r * 1.6, 0.25);
@@ -3086,10 +3102,17 @@
       moveDir.y = 0;
     }
 
-    // hold to spam — no cooldown on eject / split (only mass & cell limits)
-    if (keys.has('k')) useSkill('k');
-    if (keys.has('j')) useSkill('j');
-    if (keys.has('u')) useSkill('u');
+    // hold: continue split/eject with a short gap so one press ≠ multi-cascade
+    // each split is still only 1 large cell → 2; small cells are skipped
+    if (keys.has('k') && now - lastEjectAt >= EJECT_HOLD_GAP) {
+      useSkill('k');
+      lastEjectAt = now;
+    }
+    if ((keys.has('j') || keys.has('u')) && now - lastSplitAt >= SPLIT_HOLD_GAP) {
+      if (keys.has('j')) useSkill('j');
+      else useSkill('u');
+      lastSplitAt = now;
+    }
 
     // hold G to keep pulling fragments together
     if (keys.has('g') && player && player.alive && player.cells.length > 1 && cooldowns.g <= 0) {
