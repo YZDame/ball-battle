@@ -447,29 +447,44 @@
     .pick .desc { display: none; }
 
     .menu-actions {
-      display: flex;
+      display: grid;
+      grid-template-columns: 1fr;
       gap: 8px;
-      margin-top: 2px;
+      width: 100%;
+      margin-top: 4px;
     }
-    .menu-actions .btn { flex: 1; }
+    .menu-actions.two {
+      grid-template-columns: 1fr 1fr;
+    }
+    .menu-actions .btn {
+      width: 100%;
+      min-width: 0;
+    }
 
     @media (max-width: 420px) {
       .form-row { grid-template-columns: 1fr; }
+      .menu-actions.two { grid-template-columns: 1fr; }
     }
 
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      width: 100%; padding: 11px 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 44px;
+      padding: 0 16px;
+      box-sizing: border-box;
       border-radius: 999px;
-      border: none;
+      border: 1px solid transparent;
       background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 68%, #0f766e));
       color: var(--btn-ink);
       font-family: var(--font-ui);
-      font-weight: 700; font-size: 13px;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 1;
       cursor: pointer;
-      letter-spacing: 0.02em;
       box-shadow: 0 10px 28px color-mix(in srgb, var(--accent) 30%, transparent);
-      transition: transform 0.15s, filter 0.15s, box-shadow 0.15s;
+      transition: transform 0.15s, filter 0.15s, box-shadow 0.15s, background 0.15s, border-color 0.15s;
     }
     .btn:hover {
       filter: brightness(1.06);
@@ -478,52 +493,111 @@
     }
     .btn:active { transform: translateY(0); filter: brightness(0.98); }
     .btn.ghost {
-      margin-top: 0;
-      background: rgba(255,255,255,0.04);
+      margin: 0;
+      background: rgba(255,255,255,0.05);
       color: var(--text);
       border: 1px solid var(--line);
       box-shadow: none;
       font-weight: 600;
-      font-size: 12px;
+      font-size: 14px;
     }
     .btn.ghost:hover {
-      background: rgba(255,255,255,0.08);
-      filter: none; box-shadow: none;
+      background: rgba(255,255,255,0.1);
+      border-color: color-mix(in srgb, var(--text) 25%, var(--line));
+      filter: none;
+      box-shadow: none;
+      transform: translateY(-2px);
     }
 
-    /* end screen keeps single column compact */
-    .card-head {
-      padding: 16px 18px 12px;
-      border-bottom: 1px solid var(--line);
+    /* ── End / result screen (same glass language as start) ── */
+    .end-wrap {
+      width: min(400px, 92vw);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      animation: cardIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
-    .card .eyebrow {
-      font-size: 12px; font-weight: 600;
+    .end-title-out {
+      margin: 0;
+      font-size: clamp(28px, 6vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      text-align: center;
+      color: var(--text);
+      line-height: 1.2;
+    }
+    .card.end-card {
+      width: 100%;
+      padding: 0;
+    }
+    .end-body {
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 14px;
+      text-align: center;
+    }
+    .end-body .eyebrow {
+      font-size: 12px;
+      font-weight: 600;
       color: var(--accent);
+      margin: 0;
     }
-    .card h2 {
-      font-size: 22px; font-weight: 800;
-      margin: 5px 0 0;
+    .end-body .end-heading {
+      font-size: 20px;
+      font-weight: 800;
       letter-spacing: -0.02em;
+      color: var(--text);
+      margin: 0;
+      line-height: 1.25;
     }
-    .card-body { padding: 10px 16px 16px; }
-    .card > p, .card-body > p {
-      color: var(--muted); line-height: 1.5; font-size: 12px;
+    .end-body .end-desc {
+      display: none; /* keep node for JS, hide empty clutter */
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    .end-body .end-desc:not(:empty) {
+      display: block;
     }
 
     .stats-end {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-      margin: 12px 0 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      width: 100%;
+      margin: 0;
     }
     .stat-box {
-      padding: 10px 12px;
+      padding: 12px 10px;
       border-radius: 14px;
       border: 1px solid var(--line);
-      background: rgba(255,255,255,0.03);
+      background: rgba(255,255,255,0.04);
+      text-align: center;
+      min-height: 68px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      box-sizing: border-box;
     }
-    .stat-box .lbl { font-size: 10px; color: var(--muted); font-weight: 600; }
+    .stat-box .lbl {
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1;
+    }
     .stat-box .val {
-      margin-top: 3px; font-size: 18px; font-weight: 700;
-      font-family: var(--font-mono); color: var(--accent);
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: var(--font-mono);
+      color: var(--accent);
+      line-height: 1.1;
     }
 
     body.theme-cyber { --accent: #22d3ee; --gold: #e879f9; --screen-mid: #0c1020; --btn-ink: #042f2e; }
@@ -655,22 +729,22 @@
   </div>
 
   <div id="end-screen">
-    <div class="card end-card">
-      <div class="card-head">
-        <div class="eyebrow">本局结算</div>
-        <h2 id="end-title">被吞食了</h2>
-      </div>
-      <div class="card-body">
-        <p id="end-desc"></p>
-        <div class="stats-end">
-          <div class="stat-box"><div class="lbl">最高质量</div><div class="val" id="end-mass">0</div></div>
-          <div class="stat-box"><div class="lbl">得分</div><div class="val" id="end-score">0</div></div>
-          <div class="stat-box"><div class="lbl">存活</div><div class="val" id="end-time">0:00</div></div>
-          <div class="stat-box"><div class="lbl">击杀</div><div class="val" id="end-kills">0</div></div>
-        </div>
-        <div class="menu-actions">
-          <button class="btn" id="btn-again">再来</button>
-          <button class="btn ghost" id="btn-menu">菜单</button>
+    <div class="end-wrap">
+      <h1 class="end-title-out">本局结算</h1>
+      <div class="card end-card">
+        <div class="end-body">
+          <h2 class="end-heading" id="end-title">被吞食了</h2>
+          <p class="end-desc" id="end-desc"></p>
+          <div class="stats-end">
+            <div class="stat-box"><div class="lbl">最高质量</div><div class="val" id="end-mass">0</div></div>
+            <div class="stat-box"><div class="lbl">得分</div><div class="val" id="end-score">0</div></div>
+            <div class="stat-box"><div class="lbl">存活</div><div class="val" id="end-time">0:00</div></div>
+            <div class="stat-box"><div class="lbl">击杀</div><div class="val" id="end-kills">0</div></div>
+          </div>
+          <div class="menu-actions two">
+            <button class="btn" id="btn-again">再来</button>
+            <button class="btn ghost" id="btn-menu">菜单</button>
+          </div>
         </div>
       </div>
     </div>
