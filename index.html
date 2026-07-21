@@ -1202,15 +1202,16 @@
     let bgmMode = 'menu'; // menu | game
     let bgmEl = null;
 
-    // Local loop tracks (generated cheerful WAV, free to use with the game)
+    // Bilibili BV11i421a7Ps — 彩豆森林（yutto 音频提取）
+    // 菜单 / 局内共用同一条 BGM 循环
     const tracks = {
-      menu: new Audio('audio/menu.wav'),
-      game: new Audio('audio/game.wav')
+      menu: new Audio('audio/bgm.mp3'),
+      game: new Audio('audio/bgm.mp3')
     };
     tracks.menu.loop = true;
     tracks.game.loop = true;
-    tracks.menu.volume = 0.38;
-    tracks.game.volume = 0.42;
+    tracks.menu.volume = 0.42;
+    tracks.game.volume = 0.48;
     tracks.menu.preload = 'auto';
     tracks.game.preload = 'auto';
 
