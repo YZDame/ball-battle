@@ -222,25 +222,31 @@
     #end-screen { display: none; }
 
     .menu-wrap {
-      width: min(520px, 94vw);
+      width: min(640px, 96vw);
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 18px;
+      gap: 16px;
       animation: cardIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
     }
+    /* solid dark title above card — no rainbow gradient */
     .menu-title {
       margin: 0;
-      font-size: clamp(36px, 7vw, 48px);
+      font-size: clamp(40px, 8vw, 52px);
       font-weight: 800;
-      letter-spacing: -0.03em;
+      letter-spacing: 0.04em;
       line-height: 1.15;
       text-align: center;
-      background: linear-gradient(135deg, #fff 10%, color-mix(in srgb, var(--accent) 80%, #fff) 90%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      filter: drop-shadow(0 6px 28px color-mix(in srgb, var(--accent) 35%, transparent));
+      color: #111;
+      text-shadow:
+        0 1px 0 rgba(255,255,255,0.35),
+        0 8px 32px rgba(0,0,0,0.35);
+    }
+    body.theme-day .menu-title,
+    body.theme-paper .menu-title,
+    body.theme-mint .menu-title {
+      color: #111;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.08);
     }
 
     .card {
@@ -259,17 +265,7 @@
     }
     .card.menu-card {
       width: 100%;
-      max-height: min(78vh, 480px);
-    }
-    .card.menu-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(circle at 12% 0%, color-mix(in srgb, var(--accent) 14%, transparent), transparent 42%),
-        radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 40%);
-      opacity: 0.9;
+      max-height: min(80vh, 460px);
     }
     .card.end-card {
       width: min(400px, 92vw);
@@ -281,41 +277,115 @@
       to { opacity: 1; transform: none; filter: none; }
     }
 
+    .menu-shell {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      min-height: 0;
+      flex: 1;
+    }
+    @media (max-width: 560px) {
+      .menu-shell { grid-template-columns: 1fr; }
+      .menu-art { min-height: 100px; border-right: none; border-bottom: 1px solid var(--line); }
+    }
+
+    /* left: blurred floating balls */
+    .menu-art {
+      position: relative;
+      overflow: hidden;
+      border-right: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 40% 40%, color-mix(in srgb, var(--accent) 18%, transparent), transparent 55%),
+        linear-gradient(165deg, rgba(255,255,255,0.04), transparent 70%);
+    }
+    .menu-art .ball {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      filter: blur(0.4px);
+    }
+    .menu-art .ball-1 {
+      width: 88px; height: 88px; left: 18%; top: 22%;
+      background: radial-gradient(circle at 32% 28%, #fff9, var(--accent) 42%, color-mix(in srgb, var(--accent) 40%, #000) 100%);
+      box-shadow: 0 12px 40px color-mix(in srgb, var(--accent) 35%, transparent);
+      animation: floatOrb 6.5s ease-in-out infinite;
+      filter: blur(1.2px);
+      opacity: 0.92;
+    }
+    .menu-art .ball-2 {
+      width: 52px; height: 52px; right: 16%; top: 38%;
+      background: radial-gradient(circle at 35% 30%, #fff8, #f472b6 50%, #831843 100%);
+      animation: floatOrb 5.2s ease-in-out infinite reverse;
+      filter: blur(2px);
+      opacity: 0.75;
+    }
+    .menu-art .ball-3 {
+      width: 36px; height: 36px; left: 28%; bottom: 22%;
+      background: radial-gradient(circle at 35% 30%, #fff9, #fbbf24 48%, #92400e 100%);
+      animation: floatOrb 7.2s ease-in-out infinite;
+      animation-delay: -1.5s;
+      filter: blur(1.5px);
+      opacity: 0.8;
+    }
+    .menu-art .ball-4 {
+      width: 24px; height: 24px; right: 28%; bottom: 30%;
+      background: radial-gradient(circle at 35% 30%, #fff8, #60a5fa 50%, #1e3a8a 100%);
+      animation: floatOrb 4.8s ease-in-out infinite reverse;
+      filter: blur(2.5px);
+      opacity: 0.7;
+    }
+    .menu-art .ball-5 {
+      width: 64px; height: 64px; left: 42%; top: 52%;
+      background: radial-gradient(circle at 35% 30%, #fff6, #a78bfa 48%, #4c1d95 100%);
+      animation: floatOrb 8s ease-in-out infinite;
+      animation-delay: -3s;
+      filter: blur(6px);
+      opacity: 0.45;
+    }
+    @keyframes floatOrb {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-10px) scale(1.04); }
+    }
+
     .menu-main {
       position: relative;
       z-index: 1;
-      padding: 20px 20px 18px;
+      padding: 18px 18px 16px;
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
       min-height: 0;
       overflow: auto;
     }
-    /* equal columns so labels 名字 / 模式 sit on one horizontal line */
-    .menu-main .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px 14px;
-      align-items: start;
-    }
+
+    /* unified form: full-width stacked fields, same label track */
     .field {
-      margin-top: 0;
-      display: flex;
-      flex-direction: column;
+      margin: 0;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 10px 12px;
+      align-items: start;
       min-width: 0;
     }
     .field > label {
-      display: block;
-      height: 18px;
-      line-height: 18px;
+      grid-column: 1;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
       font-size: 12px;
       font-weight: 600;
       color: var(--muted);
-      margin-bottom: 6px;
+      margin: 0;
+      white-space: nowrap;
+    }
+    .field > .field-control {
+      grid-column: 2;
+      min-width: 0;
     }
     .field input[type="text"] {
       width: 100%;
       height: 40px;
+      box-sizing: border-box;
       padding: 0 12px;
       border-radius: 12px;
       border: 1px solid var(--line);
@@ -333,27 +403,76 @@
     }
 
     .pick-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
+      display: grid;
+      gap: 6px;
+      width: 100%;
     }
-    .mode-grid { grid-template-columns: 1fr 1fr; }
+    .mode-grid {
+      grid-template-columns: 1fr 1fr;
+    }
     .mode-grid .pick {
-      padding: 9px 10px;
-      text-align: left;
+      height: 40px;
       min-height: 40px;
+      padding: 0 12px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+    .mode-grid .pick .name {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .mode-grid .pick .desc { display: none; }
+
+    .style-grid,
+    .skin-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+    /* fixed cell size for style / skin */
+    .style-grid .pick,
+    .skin-grid .pick {
+      height: 56px;
+      min-height: 56px;
+      padding: 6px 4px 4px;
+      box-sizing: border-box;
       display: flex;
       flex-direction: column;
+      align-items: center;
       justify-content: center;
+      gap: 4px;
     }
-    .mode-grid .pick .name { font-size: 12px; font-weight: 700; }
-    .mode-grid .pick .desc {
-      display: block; margin-top: 2px; font-size: 9px; color: var(--muted); line-height: 1.25;
+    .style-grid .pick .swatch {
+      width: 100%;
+      height: 16px;
+      border-radius: 6px;
+      margin: 0;
+      flex-shrink: 0;
     }
+    .skin-grid .pick .swatch {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      margin: 0;
+      flex-shrink: 0;
+      box-shadow: inset 0 -3px 8px rgba(0,0,0,0.22);
+    }
+    .style-grid .pick .name,
+    .skin-grid .pick .name {
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 600;
+    }
+    .style-grid .pick .desc,
+    .skin-grid .pick .desc { display: none; }
+
     .pick {
       border: 1px solid var(--line);
       border-radius: 12px;
       background: rgba(255,255,255,0.03);
-      padding: 7px 4px;
-      cursor: pointer; text-align: center;
+      cursor: pointer;
       transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
     }
     .pick:hover {
@@ -365,27 +484,28 @@
       background: color-mix(in srgb, var(--accent) 13%, transparent);
       box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 14%, transparent);
     }
-    .pick .swatch {
-      width: 22px; height: 22px; border-radius: 50%; margin: 0 auto 4px;
-      box-shadow: inset 0 -3px 8px rgba(0,0,0,0.22);
-    }
-    .pick .name { font-size: 10px; color: var(--text); font-weight: 600; }
+    .pick .name { color: var(--text); }
     .pick .desc { display: none; }
 
-    .style-grid { grid-template-columns: repeat(4, 1fr); }
-    .style-grid .pick .swatch {
-      width: 100%; height: 14px; border-radius: 6px; margin-bottom: 4px;
-    }
-    .skin-grid { grid-template-columns: repeat(4, 1fr); }
-
     .menu-actions {
-      display: flex; gap: 8px; align-items: center;
-      margin-top: 2px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 4px;
+      padding-left: 52px; /* align with field controls under labels */
     }
     .menu-actions .btn { flex: 1; }
 
     @media (max-width: 480px) {
-      .menu-main .form-row { grid-template-columns: 1fr; }
+      .field {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .field > label {
+        height: auto;
+        justify-content: flex-start;
+      }
+      .menu-actions { padding-left: 0; }
     }
 
     .btn {
@@ -549,31 +669,42 @@
     <div class="menu-wrap">
       <h1 class="menu-title">小球大乱斗</h1>
       <div class="card menu-card">
-        <div class="menu-main">
-          <div class="form-row">
+        <div class="menu-shell">
+          <aside class="menu-art" aria-hidden="true">
+            <span class="ball ball-1"></span>
+            <span class="ball ball-2"></span>
+            <span class="ball ball-3"></span>
+            <span class="ball ball-4"></span>
+            <span class="ball ball-5"></span>
+          </aside>
+          <div class="menu-main">
             <div class="field">
               <label>名字</label>
-              <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+              <div class="field-control">
+                <input id="name-input" type="text" maxlength="12" placeholder="昵称" value="冒险者" autocomplete="off" />
+              </div>
             </div>
             <div class="field">
               <label>模式</label>
-              <div class="pick-grid mode-grid" id="mode-picks"></div>
+              <div class="field-control">
+                <div class="pick-grid mode-grid" id="mode-picks"></div>
+              </div>
             </div>
-          </div>
-
-          <div class="form-row">
             <div class="field">
               <label>风格</label>
-              <div class="pick-grid style-grid" id="style-picks"></div>
+              <div class="field-control">
+                <div class="pick-grid style-grid" id="style-picks"></div>
+              </div>
             </div>
             <div class="field">
               <label>皮肤</label>
-              <div class="pick-grid skin-grid" id="skin-picks"></div>
+              <div class="field-control">
+                <div class="pick-grid skin-grid" id="skin-picks"></div>
+              </div>
             </div>
-          </div>
-
-          <div class="menu-actions">
-            <button class="btn" id="btn-start">开始游戏</button>
+            <div class="menu-actions">
+              <button class="btn" id="btn-start">开始游戏</button>
+            </div>
           </div>
         </div>
       </div>
