@@ -3430,12 +3430,12 @@
       coasting = true;
       if (brakeT > 0) brakeT = 0; // new input cancels brake hold
     } else if (mouseActive && player && player.alive && mouseWorld.x >= 0) {
-      // mouse control: move toward cursor
+      // mouse control: move toward cursor from centroid
       const pc = centroid(player);
       const dx = mouseWorld.x - pc.x;
       const dy = mouseWorld.y - pc.y;
       const d = Math.hypot(dx, dy);
-      if (d > 10) {
+      if (d > 2) {
         const mmx = dx / d;
         const mmy = dy / d;
         // soft click when direction changes
@@ -3449,10 +3449,10 @@
         coasting = true;
         if (brakeT > 0) brakeT = 0;
       } else {
-        // too close to cursor, stop
+        // very close to cursor, keep slow approach
         moveDir.x = 0;
         moveDir.y = 0;
-        coasting = false;
+        coasting = true;
       }
     } else if (coasting) {
       moveDir.x = coastDir.x;
@@ -3479,24 +3479,49 @@
 
     if (player && player.alive) {
       const dirLen = Math.hypot(moveDir.x, moveDir.y);
-      const hasInput = dirLen > 0.01 || mouseActive;
       for (const cell of player.cells) {
         // each cell's speed depends on its own mass
         const sp = speedOf(cell.mass) * (dashT > 0 ? 1.25 : 1);
         if (brakeT > 0) {
           cell.vx = 0;
           cell.vy = 0;
-        } else if (hasInput) {
+        } else if (mouseActive && mouseWorld.x >= 0) {
+          // mouse mode: each cell independently moves toward cursor
+          const dx = mouseWorld.x - cell.x;
+          const dy = mouseWorld.y - cell.y;
+          const d = Math.hypot(dx, dy);
+          if (d > 2) {
+            const cellDirX = dx / d;
+            const cellDirY = dy / d;
+            const desiredVx = cellDirX * sp;
+            const desiredVy = cellDirY * sp;
+            if (cell.boost > 0.5) {
+              cell.vx = lerp(cell.vx, desiredVx, 0.08);
+              cell.vy = lerp(cell.vy, desiredVy, 0.08);
+            } else {
+              cell.vx = lerp(cell.vx, desiredVx, 0.38);
+              cell.vy = lerp(cell.vy, desiredVy, 0.38);
+              const cur = Math.hypot(cell.vx, cell.vy);
+              if (Math.abs(cur - sp) < 0.06) {
+                cell.vx = desiredVx;
+                cell.vy = desiredVy;
+              }
+            }
+          } else {
+            // cell reached cursor
+            cell.vx = lerp(cell.vx, 0, 0.15);
+            cell.vy = lerp(cell.vy, 0, 0.15);
+          }
+        } else if (dirLen > 0.01) {
+          // WASD mode
           const desiredVx = moveDir.x * sp;
           const desiredVy = moveDir.y * sp;
           if (cell.boost > 0.5) {
-            // after split: keep some boost but still trend toward mass-based cruise
             cell.vx = lerp(cell.vx, desiredVx, 0.08);
             cell.vy = lerp(cell.vy, desiredVy, 0.08);
           } else {
-            const blend = mouseActive ? 0.38 : 0.32;
-            cell.vx = lerp(cell.vx, desiredVx, blend);
-            cell.vy = lerp(cell.vy, desiredVy, blend);
+            cell.vx = lerp(cell.vx, desiredVx, 0.32);
+            cell.vy = lerp(cell.vy, desiredVy, 0.32);
             const cur = Math.hypot(cell.vx, cell.vy);
             if (Math.abs(cur - sp) < 0.06) {
               cell.vx = desiredVx;
