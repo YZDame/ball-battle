@@ -12,8 +12,6 @@
 
 [https://ball-battle-theta.vercel.app/](https://ball-battle-theta.vercel.app/)
 
-项目由 GPT + Vercel 部署，本来也用了一下 Codex 的 site 功能，但是需要用户通过 GPT 登录才能访问，所以直接改 Vercel 了。
-
 ## 功能特点
 
 - 单人竞技和团队模式
@@ -24,23 +22,13 @@
 
 ## 本地运行
 
-这个项目没有复杂依赖，直接在浏览器中打开 `index.html` 就可以运行。
-
-也可以执行构建命令，把静态页面和 Worker 文件复制到 `dist` 目录：
-
-```bash
-npm run build
-```
-
-构建后输出：
-
-- `dist/client/index.html`
-- `dist/server/index.js`
+直接在浏览器中打开 `index.html` 即可运行，无需任何构建步骤。
 
 ## 操作说明
 
 **移动控制：**
 - `WASD` 或 **鼠标**：控制球的移动方向（360 度任意方向）
+- 鼠标放在分身上时，所有分身会独立朝光标位置靠拢
 
 **技能操作：**
 - `J`：分裂（所有符合条件的球同时分裂）
@@ -63,30 +51,12 @@ npm run build
 - AI 进攻前有 **0.8-2 秒**的延迟，给玩家留出反应时间
 - AI 之间有独立的冷却时间，不会同时发起攻击
 
-## 目录结构说明
+## 目录结构
 
 ```
 ball-battle/
-├── index.html          # 游戏主体（包含所有 CSS/JS/HTML）
-├── worker/             # Cloudflare Worker（用于部署）
-├── dist/               # 构建输出目录
+├── index.html          # 游戏主体（~145KB，包含所有 CSS/JS/HTML）
 ├── package.json        # 项目配置
 ├── vercel.json         # Vercel 部署配置
 └── README.md           # 说明文档
 ```
-
-**注意：** 虽然游戏主体只有一个 `index.html`（约 100KB），但项目需要额外的配置文件来支持 Vercel 部署：
-- `package.json`：定义构建脚本
-- `vercel.json`：配置 Vercel 的构建和输出目录
-- `worker/`：Cloudflare Worker 脚本（可选的备用部署方案）
-- `dist/`：构建后生成的输出目录
-
-## 部署
-
-仓库包含 `vercel.json`，Vercel 会执行：
-
-```bash
-npm run build
-```
-
-并使用 `dist/client` 作为输出目录。
